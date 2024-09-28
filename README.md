@@ -17,15 +17,21 @@ I've used this dataset to explore the following concepts, R codes, etc:
   - dplyr
   - mosaic
 - Relationships/Research Questions:
-  - Marital Status vs Pulse, Systolic Blood Pressure, Diastolic Blood Pressure, Pulse Pressure, Direct Cholesterol, Total Cholesterol
+  - Marital Status and heart health
+    -  Pulse, Systolic Blood Pressure, Diastolic Blood Pressure, Pulse Pressure, Direct Cholesterol, Total Cholesterol
       - Filtered data to those between 20 and 55 years.
-      - Checked for relationship with gender - is it different between them?
-      -
-  
+      - Checked for relationship with gender - is it different between them?  
 
 ### _Possible Future Research Questions:_
 - Pregnancy loss and perceived physical health
 - Pregnancy loss and perceived mental health
 - BMI vs Blood pressure
 - Drinking vs smoking and hours of sleep
-- 
+- HH Income and perceived mental health
+- Physical measurements and testosterone levels in prepubescent boys
+  - Height, weight, BMI
+- Age of first child and perceived mental health
+- Poverty/HHincome vs Number of children
+- Screen Time vs mental health
+- Screen time vs demographics
+  - Age, Gender, Race
