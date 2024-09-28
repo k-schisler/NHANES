@@ -27,5 +27,5 @@ I've used this dataset to explore the following concepts, R codes, etc:
 - Pregnancy loss and perceived physical health
 - Pregnancy loss and perceived mental health
 - BMI vs Blood pressure
-- Drinking vs drinking and hours of sleep
+- Drinking vs smoking and hours of sleep
 - 
