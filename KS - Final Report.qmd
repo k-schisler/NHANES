@@ -1,0 +1,849 @@
+---
+title: "KS Final Report: Relationships and Heart Health"
+format: docx
+editor: visual
+---
+
+## Background/Motivation for the Study
+
+An interesting concept that I stumbled across one day which may be familiar to many through popular media is that of broken heart syndrome, or "death by broken heart". Broken heart syndrome, although seemingly a fairytale, is a real medical condition that is typically induced by major stress events in a person's life (Boyd and Solh 2020). Also known as Takotsubo cardiomyopathy, broken heart syndrome has a 95% recovery rate, with 5% dying in the hospital, which is higher than previous estimates (Boyd and Solh 2020). Events that can trigger this sudden onset of acute heart failure include natural disasters, grief, heartbreak, and other causes of anger, fear, and anxiety (Boyd and Solh 2020).
+
+The motivation for my research question stems from my own life experiences. My maternal grandfather is a widow, and my parents and paternal grandparents are divorced. After the death of my grandmother, my grandfather began having more severe heart issues.
+
+## Research Question and Hypothesis
+
+Based on the idea of emotional turmoil triggering Takotsubo cardiomyopathy, I'm interested in looking to see if there is a statistical correlation between relationship status and heart health. For measures of heart health, the three main indicators are blood pressure, heart rate, and cholesterol levels (Mhemani 2018, Sabeen Chaudry 2023). In other words, for this data set, is there a relationship between marital status and pulse rate, blood pressure, and cholesterol levels?
+
+I expect that the relationship statuses associated with the most stress to have the worst heart health, considering the symptoms of Takotsubo cardiomyopathy and the effect of stress on the heart. I would conclude the relationship statuses with the most stress are divorced, separated, and widowed. Married, never married, and living with partner would likely have better heart health on average. For these reasons, I will examine both in detail and in a broad sense, grouping the above into separate categories. This broader grouping will help determine if love and loss have an effect on individuals measures of heart health. The group of individuals that have never married will be separated, as they do not fit into either love or loss well enough to place them there, almost acting as a sort of control.
+
+Boyd and Solh 2020 states that symptoms of broken heart syndrome include tachycardia, or high pulse rate, hypotension, or low blood pressure, and narrow pulse pressure. Therefore, I predict that those that are divorced, separated, and widowed will have a higher pulse rate, lower blood pressure, and lower pulse pressure. In terms of cholesterol, the data set states that both DirectChol and TotChol are measures of the HDL cholesterol (Dalrymple and Wild 2022). Commonly viewed as the "good" cholesterol, high levels of this type lowers the risk of heart disease (Assadi 2017, Heart.org 2024). A study in 2017 found that psychological stress can lead to decreasing levels of HDL (Assadi 2017). Based on this and the assumed stress of the relationship statuses, I believe that the high stress relationships will have lower HDL cholesterol levels, shown via the Direct and Total variables in the data set. However, for the purposes of this testing, I will treat these tests as two tailed tests and determine the directionality of any differences statistically rather than limiting the test.
+
+**Pulse Rate:**
+
+H(0): There is no difference in pulse rate between marital statuses in the data set. Marital Status cannot be used to predict pulse rate.
+
+H(A): There is a difference in pulse rate between marital statuses in the data set. Marital Status can be used to predict pulse rate.
+
+**Blood Pressure:**
+
+H(0)~1~: There is no difference in systolic blood pressure between marital statuses in the data set. Marital Status cannot be used to predict systolic blood pressure.
+
+H(A)~1~: There is a difference in systolic blood pressure between marital statuses in the data set. Marital Status can be used to predict systolic blood pressure.
+
+H(0)~2~: There is no difference in diastolic blood pressure between marital statuses in the data set. Marital Status cannot be used to predict diastolic blood pressure.
+
+H(A)~2~: There is a difference in diastolic blood pressure between marital statuses in the data set. Marital Status can be used to predict diastolic blood pressure.
+
+H(0)~3~: There is no difference in pulse pressure between marital statuses in the data set. Marital Status cannot be used to predict pulse pressure.
+
+H(A)~3~: There is a difference in pulse pressure between marital statuses in the data set. Marital Status can be used to predict pulse pressure.
+
+**Cholesterol:**
+
+H(0): There is no difference in the cholesterol levels between marital statuses in the data set. Marital Status cannot be used to predict cholesterol levels.
+
+H(A): There is a difference in the cholesterol levels between marital statuses in the data set. Marital Status can be used to predict cholesterol levels.
+
+## Data Description and Exploratory Data Analysis
+
+The National Health and Nutrition Examination Study (NHANES) will be used for investigation into the research question. The full data set contains 10,000 observations across 76 variables, and is collected by
+both interviews and physical examinations (CDC.gov, Accessed 2024). Nine of the original variables are of interest for this study, as well as some created variables form the data. Within the NHANES dataset, "MaritalStatus" will serve to determine the relationship status of the individuals. This variable is only reported for those 20 years or older (Dalrymple and Wild 2022), and so the data that I will be working with will be restricted and filtered in the same way. There are several variables that would fall under the blood pressure, heart rate, and cholesterol categories, namely "Pulse", "BPSysAve" (and their 3 individual readings), "BPDiaAve" (and their 3 individual readings), "DirectChol", and "TotChol" (Dalrymple and Wild 2022). For the sake of brevity, only the average readings of the systolic and diastolic blood pressure will be examined rather than each of the individual readings that make up the average. "Pulse" is given in beats per minute (BPM), all blood pressure variables are given in mmHg, and cholesterol levels are given in mmol/L (Dalrymple and Wild 2022).
+
+Several variables will be calculated from the data, the first of which is Pulse Pressure. A narrow pulse pressure can be a symptom of broken heart syndrome and acute systolic heart failure (Boyd and Solh 2020). Pulse pressure is calculated via the difference between the systolic ("BPSysAve") and diastolic ("BPDiaAve") blood pressure (Cleveland Clinic 2024). This will be aptly named "PulsePressure" in the modified data set. Another variable created is called "Relationship", which groups the MaritalStatus categories into if the relationship is non-existent, called "never", if the individual is in a relationship, named "current", or "past", meaning that they were once in a relationship, but it was lost either by divorce, separation, or death of the partner. This is to allow for further comparisons between a the presumed control group of those that have never married against those currently in a relationship or those that may have experienced heartbreak in the loss of the relationship. "Past" would be the category considered high stress, as mentioned by the predictions in the background section of this study.
+
+MaritalStatus and Relationship are categorical variables, while all other variables being examined are numerical variables, meaning that what will be exaimined is if the belonging to particular groups changes each individual response variable using ANOVA and Tukey's Honest Significant Difference test.
+
+First, the new variable are created and the data set is filtered. This will make it more manageable and restrict the data to only the desired variables or those that could be important for data interpretation, as well as removing individuals that do not have a recorded marital status:
+
+```{r}
+# Packages and dataset
+library(NHANES) #Loads the NHANES data set
+library(ggplot2)  # Loads the ggplot2 library
+library(dplyr)  # Loads the dplyr library
+library(mosaic) # Loads the mosaic package
+
+my.table <- table(NHANES$MaritalStatus, dnn="Marital Status")
+addmargins(my.table)
+prop.table(my.table)
+
+favstats(Age ~ MaritalStatus, data = NHANES)
+
+#Make PulsePressure Variable, remove N/A marital Statuses, filter table to NHANES_mod for only important variables.
+NHANES_mod <- NHANES %>% 
+  dplyr::select(ID, Gender, Age, MaritalStatus, Pulse, BPSysAve, BPDiaAve, DirectChol, TotChol) %>%
+  filter (!is.na(MaritalStatus)) %>%
+  filter (Age < 55) %>%
+  mutate(PulsePressure = BPSysAve - BPDiaAve) %>%
+  mutate(Relationship = case_when(
+    MaritalStatus == "NeverMarried" ~ "Never", 
+    MaritalStatus %in% c("LivePartner", "Married") ~ "Current", 
+    MaritalStatus %in% c("Widowed", "Separated", "Divorced") ~ "Past" 
+  ))
+
+my.table2 <- table(NHANES_mod$MaritalStatus, dnn="Marital Status")
+my.table3 <- table(NHANES_mod$Relationship, dnn="Relationship Type")
+addmargins(my.table2)
+addmargins(my.table3)
+prop.table(my.table2)
+prop.table(my.table3)
+
+favstats(Age ~ Relationship, data = NHANES_mod)
+favstats(Age ~ MaritalStatus, data = NHANES_mod)
+```
+
+Notice that the mean age of widowed individuals in the full data set is 73.5 years, which is much older than some of the other average ages for the other marital status categories. According to the National Institute of Aging, heart health generally declines with age. To mitigate effects seen with this confounding variable, the data set has been further restricted to those between 20 years and 55 years old. Unfortunately, this does reduce the widowed category from n=456 to n=34.
+
+After filtering the data set to contain individuals with a recorded Marital Status and are between 20 and 55 years old, the modified data set has a total of 4793 observations across 10 variables. The majority of these observations (51.8%, n=2486) are married, followed by never married (25.9%, n=1241), live with their partner (9.9%, n=474), divorced (8.8%, n=420), separated (2.9%, n=138), and lastly widowed (0.7%, n=34). These sample sizes will change with each variable, as some will contain "N/A" in the variable being investigated, or improbable outliers that are removed from the data set.
+
+When checking these same values using "Relationship" instead of "MaritalStatus", there is a discrepancy in the age between these groupings, though much less concerning than before the age filtering, where the age was well into senior years. This categorical grouping does help correct the issue with the widow group becoming so small after filtering by age, combining these individuals with others who experienced a relationship loss. Most of the observations are currently in a relationship at n=2960 (61.8%), followed by those who have never been married at n= 1241 (25.9%) and lastly those who have a past marriage and experienced the loss of that relationship at n= 595 (12.4%).
+
+### Summary Statistics
+
+Breakdowns of sample size and various summary statistics can be found below for each variable being investigated, separated by marital status and relationship type.
+
+#### **Pulse Rate**
+
+```{r}
+#Pulse Rate Summary Statistics by Marital Status
+mean(NHANES_mod$Pulse, na.rm = TRUE)
+sd(NHANES_mod$Pulse, na.rm = TRUE)
+favstats(Pulse ~ Relationship, data = NHANES_mod)
+favstats(Pulse ~ MaritalStatus, data = NHANES_mod)
+```
+
+When reviewing the pulse rate of the data, the mean across all categories is 73.5 BPM. Generally, each individual marital status has approximately the same mean, with the exception of widows, whom have an average of 79.1 BPM. The standard deviation for all pulse rates date is 11.8 BPM. Based on this, it appears that divorced has a narrower spread than the average population, with a standard deviation of 10.8 BPM, while separated has a greater spread with a standard deviation of 12.6 BPM. The number of samples included in the Pulse Rate data after the N/A observations are removed is 4610.
+
+Reviewing this same data with the more broad "Relationship" categories, there are similar trends. Past relationships has a narrower spread at 11.3 BPM, which happens to be that which the divorcees belong in. Interestingly, those in a current relationship have a lower average BPM at 73.0 BPM than both the past and never categories.
+
+#### **Blood Pressure**
+
+```{r}
+#Pulse Pressure Summary Statistics by Marital Status
+mean(NHANES_mod$PulsePressure, na.rm = TRUE)
+sd(NHANES_mod$PulsePressure, na.rm = TRUE)
+favstats(PulsePressure ~ Relationship, data = NHANES_mod)
+favstats(PulsePressure ~ MaritalStatus, data = NHANES_mod)
+
+#Diastolic Blood Pressure Summary Statistics by Marital Status
+mean(NHANES_mod$BPDiaAve, na.rm = TRUE)
+sd(NHANES_mod$BPDiaAve, na.rm = TRUE)
+favstats(BPDiaAve ~ Relationship, data = NHANES_mod)
+favstats(BPDiaAve ~ MaritalStatus, data = NHANES_mod)
+
+#Systolic Blood Pressure Summary Statistics by Marital Status
+mean(NHANES_mod$BPSysAve, na.rm = TRUE)
+sd(NHANES_mod$BPSysAve, na.rm = TRUE)
+favstats(BPSysAve ~ Relationship, data = NHANES_mod)
+favstats(BPSysAve ~ MaritalStatus, data = NHANES_mod)
+```
+
+Although systolic, diastolic, and pulse pressure are all dependent on each other, I would like to examine them separately for trends. It is very possible that if one shows correlation with marital status, that all three of them will considering that they are influential on each other. The sample size for all three of these variables is 4606 after the N/A values are removed from the data.
+
+Pulse pressure has a typical value of 45.3mmHg and a standard deviation of 12.2mmHg. In a broader sense, it appears those having a past relationship have a lower average pulse pressure at 44.5mmHg, while those who have never had a marital relationship have a higher average pulse pressure at 46.5mmHg. There appears to be more variability in the mean when further separated into marital status categories, with the highest average belonging to separated individuals at 47.8mmHg, and the lowest belonging to those that are widowed at 43.4mmHg. Widows also appear to have the lowest spread of pulse pressures, with a standard deviation of 8.3mmHG.
+
+The mean of diastolic blood pressure is 71.2mmHg, with a standard deviation of 11.3mmHg. The relationship types show that those with relationships past have the highest average diastolic blood pressure at 73.0mmHg, while those in the never category have the lowest average diastolic blood pressure at 69.2mmHg. The spread for the relationship variable is similar across all three categories. Once further divided into the original marital status categories, there are larger deviations from this average, with the highest being the widows, with a mean of 76.1mmHg. However, it does appear that the standard deviation across each of the individual groups is generally the same as that of the full sample size.
+
+Systolic blood pressure has a mean of 116.5mmHg and a standard deviation of 13.8mmHg. Relationship type categories show that those currently in a relationship have the same average as the total data set, while those never in a relationship have a lower systolic blood pressure on average at 115.7mmHg, and those who have had past relationships have a higher average systolic blood pressure at 117.5mmHg. Further breaking this down, both separated and widowed individuals have a higher group average at 120.0mmHg and 119.4mmHg respectively. This explains why the past relationships would have a higher average, since both these marital statuses belong in the past relationship type. The other groups have a similar average to the total average. Separated and divorced individuals have a greater spread with standard deviations of 15.2mmHg and 15.49mmHg respectively. Divorced individuals have a lower spread at 11.2mmHg.
+
+The diastolic blood pressure stats table brings to light a few outlier values that are not in the realm of possibility; there are several values that are recorded as 0 in the data set. Giving this information, I can clean the data further by removing the values that are equal to 0 when analyzing diastolic and pulse pressure, since these are directly related:
+
+```{r}
+NHANES_modBP <- NHANES_mod %>%
+  filter (BPDiaAve != 0)
+
+#Pulse Pressure Summary Statistics by Marital Status
+mean(NHANES_modBP$PulsePressure, na.rm = TRUE)
+sd(NHANES_modBP$PulsePressure, na.rm = TRUE)
+favstats(PulsePressure ~ Relationship, data = NHANES_modBP)
+favstats(PulsePressure ~ MaritalStatus, data = NHANES_modBP)
+
+#Diastolic Blood Pressure Summary Statistics by Marital Status
+mean(NHANES_modBP$BPDiaAve, na.rm = TRUE)
+sd(NHANES_modBP$BPDiaAve, na.rm = TRUE)
+favstats(BPDiaAve ~ Relationship, data = NHANES_modBP)
+favstats(BPDiaAve ~ MaritalStatus, data = NHANES_modBP)
+
+```
+
+This changes the mean and standard deviation of pulse pressure to 45.3mmHg and 12.0mmHg, respectively, meaning that the mean was generally unaffected, but the standard deviation was more affected by the removal of the outliers. For diastolic blood pressure, the new mean is 71.2mmHg and the new standard deviation is 11.2mmHg, again not changing the overall average by much, but changing the standard deviation in a noticeable way. This transformation has not affected the past relationships at all, though it has minorly changed the never and current categories in both average and spread. After all modifications on the pressure variables, pulse pressure and average diastolic blood pressure have 4602 observations, while average systolic blood pressure has 4606.
+
+#### **Cholesterol**
+
+```{r}
+#Total Cholesterol Summary Statistics by Marital Status
+mean(NHANES_mod$TotChol, na.rm = TRUE)
+sd(NHANES_mod$TotChol, na.rm = TRUE)
+favstats(TotChol ~ Relationship, data = NHANES_mod)
+favstats(TotChol ~ MaritalStatus, data = NHANES_mod)
+
+#Direct Cholesterol Summary Statistics by Marital Status
+mean(NHANES_mod$DirectChol, na.rm = TRUE)
+sd(NHANES_mod$DirectChol, na.rm = TRUE)
+favstats(DirectChol ~ Relationship, data = NHANES_mod)
+favstats(DirectChol ~ MaritalStatus, data = NHANES_mod)
+
+```
+
+The sample size for both direct and total cholesterol levels is 4540 after removal of N/A values. These variables, again, are likely dependent on each other, however I will look at them individually for trends.
+
+Total cholesterol has a mean value of 5.02mmol/L and a standard deviation of 1.04mmol/L. Individuals having a past relationship have an average total cholesterol than this overall mean, with 5.15mmol/L, while those never in a relationship and currently in a relationship on average have a lower total cholesterol at 4.82mmol/L and 5.08mmol/L, respectively. Dissecting the data further, widowed individuals have the highest average at 5.31mmol/L, which is actually lower that the median value of the group (5.61mmol/L), which could suggest that there is a slight skew to this data. When comparing this data variable, it could be informative to also look at the median. Widowed and never married have the lowest spread of all the marital status groups at 0.86mmol/L and 0.96mmol/L. Never married also shows a lower mean than the total average for total cholesterol at 4.81mmol/L.
+
+Direct cholesterol has a mean of 1.34mmol/L and a standard deviation of 0.41mmol/L. Individuals having past relationships have an average direct cholesterol higher than this at 1.37mmol/L, which is interesting considering that the widows have the lowest mean at 1.28mmol/L. Divorced individuals have the most variation in their direct cholesterol levels at 0.50mmol/L, while widows have the narrowest at 0.35mmol/L. This shows the effect of having such a small n for widows, as it appears that it doesn't have a sizable effect on the broader category of past relationships.
+
+Despite the widows' small sample size, it shows the least variability and smallest standard deviation of all other groups in most of the variables being examined.
+
+### Visualizations
+
+Relationships between these groups and the variables can be more easily compared when using visualizations, such as Histograms, QQ plots, and Box Plots. The histograms and QQ plots show the shape of the distribution and act as indicators for which statistical tests would be the most appropriate. Violin plots are similar to histograms in that they show the shape of the distribution, but they instead show the data by category—in this case, marital status or relationship type—rather than grouping it all together into one distribution. Finally, a box plot allows us to more clearly see where the mean and median are located within each marital status and compare them between each other, as well as visualize the interquartile range (IQR) and extreme
+
+#### **Pulse Rate**
+
+```{r}
+#Histogram
+NHANES_mod %>%
+  filter(!is.na(Pulse)) %>%
+  ggplot(aes(x = Pulse)) + 
+  geom_histogram(bins=20) + 
+  ggtitle("Distribution of Pulse") +
+  xlab("Pulse")
+
+#QQPlot
+qqnorm(NHANES_mod$Pulse)
+
+#Violin Plot
+NHANES_mod %>%
+  filter (!is.na(Pulse)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=Pulse,)) + 
+  geom_violin() +
+  ggtitle("Distribution of Pulse by Relationship Type") +
+  ylab("Pulse") + 
+  xlab("Relationship Type")
+
+#Boxplot
+NHANES_mod %>%
+  filter(!is.na(Pulse)) %>%
+  ggplot(aes(x = as.factor(Relationship), y = Pulse)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +  
+  ggtitle("Distribution of Pulse by Relationship Type") + 
+  ylab("Pulse") + 
+  xlab("Relationship Type")
+
+#Violin Plot
+NHANES_mod %>%
+  filter (!is.na(Pulse)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=Pulse,)) + 
+  geom_violin() +
+  ggtitle("Distribution of Pulse by Marital Status") +
+  ylab("Pulse") + 
+  xlab("Marital Status") 
+
+#Boxplot
+NHANES_mod %>%
+  filter(!is.na(Pulse)) %>%
+  ggplot(aes(x = as.factor(MaritalStatus), y = Pulse)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +  
+  ggtitle("Distribution of Pulse by Marital Status") + 
+  ylab("Pulse") + 
+  xlab("Marital Status")
+```
+
+This histogram and QQ plot show that the pulse rate data is normally distributed, satisfying the assumption made by many statistical tests. The relationship types also show a normal distribution, as evidenced by the violin plot of the pulse by relationship type. Once separated into the marital statuses individually, the violin plot shows they are also approximately normally distributed. A small amount of skewedness could be argued, but since the sample size of all groups are large enough, this is acceptable for many tests. The box plots show that while there may not be a large difference between the relationship types in terms of the mean, both the mean and median of the widows' pulse rate is higher than those of the other marital statuses, as is the IQR. This supports the idea that widows may experience higher heart rate on average, meaning that marital status may be able to provide insight into pulse rate.
+
+#### **Blood Pressure**
+
+##### *Pulse Pressure*
+
+```{r}
+#Histograms
+NHANES_modBP %>%
+  filter (!is.na(PulsePressure)) %>%
+  ggplot(aes(x = PulsePressure)) + 
+  geom_histogram(bins=25) + 
+  ggtitle("Distribution of Pulse Pressure") +
+  xlab("Average Pulse Pressure")
+
+#QQPlot
+qqnorm(NHANES_modBP$PulsePressure)
+
+NHANES_modBP %>%
+  filter (!is.na(PulsePressure)) %>%
+  ggplot(aes(x = log(PulsePressure))) + 
+  geom_histogram(bins=25) + 
+  ggtitle("Distribution of log-transformed Pulse Pressure") +
+  xlab("Average Pulse Pressure")
+
+NHANES_modBP <- NHANES_modBP %>%
+  mutate(logPP = log(PulsePressure))
+NHANES_mod <- NHANES_mod %>%
+  mutate(logPP = log(PulsePressure))
+
+#Violin Plot
+NHANES_modBP %>%
+  filter (!is.na(PulsePressure)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=logPP)) + 
+  geom_violin() +
+  ggtitle("Distribution of log-transformed Pulse Pressure \n by Relationship Type") +
+  ylab("log-transformed Pulse Pressure") + 
+  xlab("Relationship Type")
+
+#Boxplot
+NHANES_modBP %>%
+  filter (!is.na(PulsePressure)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=logPP)) + 
+  geom_boxplot() +
+  ggtitle("Distribution of log-transformed Pulse Pressure \n by Relationship Type") +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +
+  ylab("log-transformed Pulse Pressure") + 
+  xlab("Relationship Type") 
+
+#Violin Plot
+NHANES_modBP %>%
+  filter (!is.na(PulsePressure)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=logPP)) + 
+  geom_violin() +
+  ggtitle("Distribution of log-transformed Pulse Pressure \n by Marital Status") +
+  ylab("log-transformed Pulse Pressure") + 
+  xlab("Marital Status")
+
+#Boxplot
+NHANES_modBP %>%
+  filter (!is.na(PulsePressure)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=logPP)) + 
+  geom_boxplot() +
+  ggtitle("Distribution of log-transformed Pulse Pressure \n by Marital Status") +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +
+  ylab("log-transformed Pulse Pressure") + 
+  xlab("Marital Status")
+```
+
+The histogram and QQ plot for the Pulse pressure do show there is more skewedness than the pulse, but since the sample size is large, this amount of skewedness could be considered acceptable for most statistical tests. However, this is easily be corrected using the log-transformed of Pulse Pressure, which is presented in the second histogram. Considering this, the remaining plots for pulse pressure utilize the log-transformed Pulse Pressure, stored in the variable "logPP" in the data set.
+
+After the logarithmic correction, the violin plots showing marital status or relationship type show minimal to no skew in the data. The box plots represent the data as generally being equal, since the IQRs are all overlapping and occupying the same values. This is interesting considering one of the main indicators of Takotsubo cardiomyopathy is a narrow or low pulse pressure, suggesting that the prediction I had will be incorrect for this variable. The mean for widows may be slightly lower, albeit not as dramatic of a difference as seen in the pulse rate. This plot also shows that there may be outliers in the LivePartner group, with two points that are rather low. However, since these are not as extreme as the 0 values found earlier in the diastolic blood pressure values, I will be leaving these in the data set and not filtering them out during analysis. There are quite a few outliers that are high as well, particularly in married and divorced individuals, which should be kept in mind during analysis interpretation.
+
+##### *Systolic Blood Pressure*
+
+```{r}
+#Histogram
+NHANES_mod %>%
+  filter (!is.na(BPSysAve)) %>%
+  ggplot(aes(x = BPSysAve)) + 
+  geom_histogram(bins=25) + 
+  ggtitle("Distribution of Average Systolic Blood Pressure") +
+  xlab("Average Systolic Blood Pressure")
+
+#QQPlot
+qqnorm(NHANES_mod$BPSysAve)
+
+#Violin Plot
+NHANES_mod %>%
+  filter (!is.na(BPSysAve)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=BPSysAve)) + 
+  geom_violin() +
+  ggtitle("Distribution of Average Systolic Blood Pressure \n by Relationship Type") +
+  ylab("Average Systolic Blood Pressure") + 
+  xlab("Relationship Type")
+
+#Boxplot
+NHANES_mod %>%
+  filter (!is.na(BPSysAve)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=BPSysAve)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +
+  ggtitle("Distribution of Average Systolic Blood Pressure \n by Relationship Type") +
+  ylab("Average Systolic Blood Pressure") + 
+  xlab("Relationship Type")
+
+#Violin Plot
+NHANES_mod %>%
+  filter (!is.na(BPSysAve)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=BPSysAve)) + 
+  geom_violin() +
+  ggtitle("Distribution of Average Systolic Blood Pressure \n by Marital Status") +
+  ylab("Average Systolic Blood Pressure") + 
+  xlab("Marital Status")
+
+#Boxplot
+NHANES_mod %>%
+  filter (!is.na(BPSysAve)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=BPSysAve)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +
+  ggtitle("Distribution of Average Systolic Blood Pressure \n by Marital Status") +
+  ylab("Average Systolic Blood Pressure") + 
+  xlab("Marital Status")
+```
+
+All plots that are for displaying skewedness in the data show that the systolic blood pressure, across the whole data set and when divided by relationship type and marital status, are approximately normally distributed. This variable is not skewed enough to warrant the transformation of the data before analysis. There may be the presence of outliers, as can be noted in the box plots. There are points that lie far above the IQR and whiskers for those all categories for relationship, but they mainly reside in married and never married when dissecting further. There is one point in the divorced data that lies above 200mmHg that is not surrounded by other points, suggesting it could be true outlier or the result of measurement error. Again, it appears there is not a large difference in IQR between the categories in the box plot, despite the mean showing variation in the summary statistics. Graphing the data shows that there may not be as large of a difference as originally perceived when viewing the numbers on their own. Viewing this box plot suggests that marital status cannot be used to predict systolic blood pressure.
+
+##### *Diastolic Blood Pressure*
+
+```{r}
+#Histogram
+NHANES_modBP %>%
+  filter (!is.na(BPDiaAve)) %>%
+  ggplot(aes(x = BPDiaAve)) + 
+  geom_histogram(bins=25) + 
+  ggtitle("Distribution of Average Diastolic Blood Pressure") +
+  xlab("Average Diastolic Blood Pressure")
+
+#QQPlot
+qqnorm(NHANES_modBP$BPDiaAve)
+
+#Violin Plot
+NHANES_modBP %>%
+  filter (!is.na(BPDiaAve)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=BPDiaAve)) + 
+  geom_violin() +
+  ggtitle("Distribution of Average Diastolic Blood Pressure \n by Relationship Type") +
+  ylab("Average Diastolic Blood Pressure") + 
+  xlab("Relationship Type")
+
+#Boxplot
+NHANES_modBP %>%
+  filter (!is.na(BPDiaAve)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=BPDiaAve)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) + 
+  ggtitle("Distribution of Average Diastolic Blood Pressure \n by Relationship Type") +
+  ylab("Average Diastolic Blood Pressure") + 
+  xlab("Relationship Type")
+
+#Violin Plot
+NHANES_modBP %>%
+  filter (!is.na(BPDiaAve)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=BPDiaAve)) + 
+  geom_violin() +
+  ggtitle("Distribution of Average Diastolic Blood Pressure \n by Marital Status") +
+  ylab("Average Diastolic Blood Pressure") + 
+  xlab("Marital Status")
+
+#Boxplot
+NHANES_modBP %>%
+  filter (!is.na(BPDiaAve)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=BPDiaAve)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) + 
+  ggtitle("Distribution of Average Diastolic Blood Pressure \n by Marital Status") +
+  ylab("Average Diastolic Blood Pressure") + 
+  xlab("Marital Status")
+```
+
+The histogram, QQ Plot, and violin plots do not show major skewedness, neither in the broad categories of relationship type nor the specific categories of marital status. The box plots reveal more information; there is a notable difference in the appearance of the data when separated by relationship versus by marital status. When separated by relationship type, there doesn't appear to be a major difference in the spread via the IQR, though there may be a slight difference in means. However, marital status reveals more variability in means than was seen with the previous two blood pressure variables, which goes against my prediction that they will be closely related in terms of if one shows predictability, so will the others. This box plot suggests that the widows have a higher average diastolic blood pressure, and that the never married group on average has a lower average diastolic blood pressure. Although this does not match my prediction that widows may have lower blood pressure, it does suggest that average diastolic blood pressure could be linked to marital status.
+
+#### **Cholesterol**
+
+##### *Total Cholesterol*
+
+```{r}
+#Histogram
+NHANES_mod %>%
+  filter (!is.na(TotChol)) %>%
+  ggplot(aes(x = TotChol)) + 
+  geom_histogram(bins=25) + 
+  ggtitle("Distribution of Total Cholesterol Level") +
+  xlab("Total Cholesterol Level")
+
+#QQPlot
+qqnorm(NHANES_mod$TotChol)
+
+#Violin Plot
+NHANES_mod %>%
+  filter (!is.na(TotChol)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=TotChol)) + 
+  geom_violin() +
+  ggtitle("Distribution of Total Cholesterol by Relationship Type") +
+  ylab("Total Cholesterol") + 
+  xlab("Relationship Type") 
+
+#Boxplot
+NHANES_mod %>%
+  filter (!is.na(TotChol)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=TotChol)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +
+  ggtitle("Distribution of Total Cholesterol by Relationship Type") +
+  ylab("Total Cholesterol") + 
+  xlab("Relationship Type") 
+
+#Violin Plot
+NHANES_mod %>%
+  filter (!is.na(TotChol)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=TotChol)) + 
+  geom_violin() +
+  ggtitle("Distribution of Total Cholesterol by Marital Status") +
+  ylab("Total Cholesterol") + 
+  xlab("Marital Status") 
+
+#Boxplot
+NHANES_mod %>%
+  filter (!is.na(TotChol)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=TotChol)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +
+  ggtitle("Distribution of Total Cholesterol by Marital Status") +
+  ylab("Total Cholesterol") + 
+  xlab("Marital Status") 
+```
+
+Generally, total cholesterol is normally distributed for the whole data set when viewing the histogram and QQ plot, and any amount of non-normality seen in the violin plots are minor enough that the sample size allows for normal statistical analysis for most of the groups. The IQR and means visible in the first box plot suggest that there may not be a significant difference between the relationship types. However, once further divided into marital status in the second box plot, it becomes apparent that the median of the widowed group is clearly greater than those in the other groups. Perhaps, this method of central tendency should be examined here as well, especially when reviewing the violin plot and noting the peak for the widowed group is further right skewed than the rest of the other categories. It may be prudent to use a different statistical method for this variable investigation given the stark difference between the mean and median for widows. The widows being higher in cholesterol levels here goes against my original prediction, but again, suggests that there could be a relationship between marital status and total cholesterol.
+
+##### *Direct Cholesterol*
+
+```{r}
+#Histogram
+NHANES_mod %>%
+  filter (!is.na(DirectChol)) %>%
+  ggplot(aes(x = DirectChol)) + 
+  geom_histogram(bins=25) + 
+  ggtitle("Distribution of Direct Cholesterol Level") +
+  xlab("Direct Cholesterol Level")
+
+#QQPlot
+qqnorm(NHANES_mod$DirectChol)
+
+NHANES_mod %>%
+  filter (!is.na(DirectChol)) %>%
+  ggplot(aes(x = log(DirectChol))) + 
+  geom_histogram(bins=25) + 
+  ggtitle("Distribution of Direct Cholesterol Level") +
+  xlab("Direct Cholesterol Level")
+
+NHANES_mod <- NHANES_mod %>%
+  mutate(logDC = log(DirectChol))
+
+#Violin Plot
+NHANES_mod %>%
+  filter (!is.na(DirectChol)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=DirectChol)) + 
+  geom_violin() +
+  ggtitle("Distribution of Direct Cholesterol by Relationship Type") +
+  ylab("Direct Choleserol") + 
+  xlab("Relationship Type") 
+
+NHANES_mod %>%
+  filter (!is.na(DirectChol)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=logDC)) + 
+  geom_violin() +
+  ggtitle("Distribution of log-transformed Direct Cholesterol \n by Relationship Type") +
+  ylab("log-transformed Direct Choleserol") + 
+  xlab("Relationship Type") 
+
+#Boxplot
+NHANES_mod %>%
+  filter (!is.na(DirectChol)) %>%
+  ggplot(aes(x=as.factor(Relationship), y=logDC)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +
+  ggtitle("Distribution of log-transformed Direct Cholesterol \n by Relationship Type") +
+  ylab("log-transformed Direct Choleserol") + 
+  xlab("Relationship") 
+
+#Violin Plot
+NHANES_mod %>%
+  filter (!is.na(DirectChol)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=logDC)) + 
+  geom_violin() +
+  ggtitle("Distribution of log-transformed Direct Cholesterol \n by Marital Status") +
+  ylab("log-transformed Direct Choleserol") + 
+  xlab("Marital Status") 
+
+#Boxplot
+NHANES_mod %>%
+  filter (!is.na(DirectChol)) %>%
+  ggplot(aes(x=as.factor(MaritalStatus), y=logDC)) + 
+  geom_boxplot() +
+  stat_summary(aes(color = "Mean"), fun = mean, geom = "point", shape = 20, size = 5) +  # Mean point
+  scale_color_manual(name = "Legend", values = c("Mean" = "red")) +
+  ggtitle("Distribution of log-transformed Direct Cholesterol \n by Marital Status") +
+  ylab("log-transformed Direct Choleserol") + 
+  xlab("Marital Status") 
+```
+
+Despite the approximately normally distributed histogram and QQ plot, the first violin plot of relationship type versus direct cholesterol levels show that there is a more significant right skew to the direct cholesterol data. This has been corrected for bytransforming the direct cholesterol with a log function and saving it in a new variable called "logDC". Any further analysis and graphs have been made with this log-transformed direct cholesterol measurements. The box plots, again, show differences in how the variable changes with the relationship type and marital status categories. In the relationship types, it appears as though there is minimal difference in means or in the IQR and spread. However, upon further division into marital statuses, it shows that there may be an effect of being widowed in comparison to the other statuses, for both the median and the mean. This supports my original prediction that the cholesterol levels may be lower for this group, and may suggest a small amount of predictability for this variable based on marital status, but not on a broader relationship types.
+
+## Analysis
+
+Since there is one categorical with more than two groups being compared across multiple variables, several ANOVA tests will be conducted to determine if there is a difference in means. This will be conducted first for the general relationship types to find if having never been in a recordable relationship, having one in the past and lost it, or currently being in one can influence these predictors of heart health. This will then be further subdivided into the marital status groups to more closely analyze where significance, if any, may stem from. Since there are so many variables being analyzed, a Tukey's Honest Significant Difference (HSD) test is also performed for each.
+
+#### **Pulse Rate**
+
+```{r}
+pr <- NHANES_mod %>%
+  filter(!is.na(Pulse))
+
+pr_ANOVA2 <- aov(Pulse ~ Relationship, data = pr)
+summary(pr_ANOVA2)
+TukeyHSD(pr_ANOVA2, conf.level=.95)
+
+
+```
+
+The ANOVA table above, with a p-value of 0.0025, the null hypothesis that there is no difference in pulse rate between relationship types is rejected at a 95% and a 99% confidence level. Utilizing the Tukey's HSD test, this can be further broken down into the following for a 5% significance level:
+
+1.  With a p-value of 0.0071 and a 95% confidence interval of 0.27 to 2.17, the null hypothesis is rejected for this family-wise pair; there is a difference in pulse rate between *Never* and *Current* in the Relationship variable for those aged 20 to 55 years. Those that belong to the *Never* category, on average, have a pulse rate 1.22BPM higher than those belonging to the *Current* category.
+2.  With a p-value of 0.0521, there is no difference in pulse rate between *Past* and *Current* in the Relationship variable in those aged 20 to 55 years, meaning the null hypothesis has failed to be rejected for this family-wise pair.
+3.  With a p-value of 0.9984, here is no difference in pulse rate between *Past* and *Never* in the Relationship variable in those aged 20 to 55 years, meaning the null hypothesis has failed to be rejected for this family-wise pair.
+
+To gain more insight, this can be further divided into Marital Statuses to see which specific pairs are contributing to the above, broader interpretation.
+
+```{r}
+
+pr_ANOVA <- aov(Pulse ~ MaritalStatus, data = pr)
+summary(pr_ANOVA)
+TukeyHSD(pr_ANOVA, conf.level=.95)
+```
+
+In the above 15 comparisons, two pairs reject the null hypothesis at a 5% significance level.
+
+1.  With a p-value of 0.0100, there is a difference in pulse rate between *NeverMarried* and *Married* in the MaritalStatus variable, with a 95% confidence interval of 0.21 BPM to 2.59 BPM. Those that were never married, on average, have a pulse rate 1.40BPM higher than those that are married for those aged 20 to 55 years.
+2.  With a p-value of 0.0297, there is a difference in pulse rate between *Never* and *Current* in the Relationship variable, with a 95% confidence interval of 0.37 BPM to 12.10 BPM. Between the ages of 20 and 55 years, widows on average have a pulse rate 6.23 BPM higher than those that are married.
+
+All other comparisons fail to reject the null hypothesis at a 5% significance level, meaning we cannot conclude from this data that the pulse rate changes based on those pair comparisons for individuals aged 20 to 55 years.
+
+#### **Blood Pressure**
+
+##### *Pulse Pressure*
+
+```{r}
+pp <- NHANES_mod %>%
+  filter(BPDiaAve != 0) %>%
+  filter(!is.na(PulsePressure))
+
+pp_ANOVA2 <- aov(logPP ~ Relationship, data = pp)
+summary(pp_ANOVA2)
+TukeyHSD(pp_ANOVA2, conf.level=.95)
+
+```
+
+The ANOVA table above, with a p-value of 0.0002, the null hypothesis is rejected at a 95% and a 99% confidence level, meaning that there is a difference in the log-transformed average pulse pressure with relationship type. Utilizing the Tukey's HSD test, this can be further broken down into the following at a 5% significance level:
+
+1.  With a p-value of 0.0003 and a 95% confidence interval of 0.01 to 0.06, there is a difference in the log-transformed average pulse pressure between *Never* and *Current* in the Relationship variable. The null hypothesis is rejected for this family-wise pair. Those that belong to the *Never* category and are between 20 and 55 years old, on average, have a log-transformed pulse pressure that is 0.035 higher than those belonging to the *Current* category.
+2.  With a p-value of 0.8251, there is no difference in the log-transformed pulse pressure between *Past* and *Current* in the Relationship variable for those aged 20 to 55 years, meaning the null hypothesis has failed to be rejected for this family-wise pair.
+3.  With a p-value of 0.0042, there is a difference in the log-transformed average pulse pressure between *Past* and *Never* in the Relationship variable for those aged 20 to 55 years, with a 95% confidence interval of -0.07 to -0.01, meaning the null hypothesis is rejected for this family-wise pair. Those that belong to the *Past* category, on average, have a log-transformed average pulse pressure that is 0.04 lower than those belonging to the *Never* category.
+
+This can be further divided into Marital Statuses to see which specific pairs are contributing to this broad interpretation.
+
+```{r}
+
+pp_ANOVA <- aov(logPP ~ MaritalStatus, data = pp)
+summary(pp_ANOVA)
+TukeyHSD(pp_ANOVA, conf.level=.95)
+
+```
+
+In the above 15 comparisons, three pairs reject the null hypothesis at a 5% significance level.
+
+1.  With a p-value of 0.0003 and a 95% confidence interval of 0.02 to 0.11, there is a difference in the log-transformed average pulse pressure between *NeverMarried* and *Divorced* in the MaritalStatus variable. Those that belong to the *NeverMarried* category, on average, have a log-transformed pulse pressure that is 0.063 higher than those belonging to the *Divorced* category for those aged 20 to 55 years.
+2.  In individuals between 20 and 55 years, with a p-value of 0.0058 and a 95% confidence interval of 0.02 to 0.17, there is a difference in the log-transformed average pulse pressure between *Separated* and *Divorced* in the MaritalStatus variable. Those that belong to the *Separated* category, on average, have a pulse pressure that is 0.092 higher than those belonging to the *Divorced* category.
+3.  With a p-value of 0.0008 and a 95% confidence interval of 0.01 to 0.06, there is a difference in the log-transformed average pulse pressure between *NeverMarried* and *Married* in the MaritalStatus variable for those aged 20 to 55 years. Those that belong to the *NeverMarried* category, on average, have a log-transformed pulse pressure that is 0.037 higher than those belonging to the *Married* category.
+
+All other comparisons fail to reject the null hypothesis at a 5% significance level, meaning we cannot conclude from this data that the log-transformed average pulse pressure changes based on those pair comparisons for individuals aged 20 to 55 years.
+
+##### Systolic Blood Pressure
+
+```{r}
+sbp <- NHANES_mod %>%
+  filter(!is.na(BPSysAve))
+
+sbp_ANOVA2 <- aov(BPSysAve ~ Relationship, data = sbp)
+summary(sbp_ANOVA2)
+TukeyHSD(sbp_ANOVA2, conf.level=.95)
+
+```
+
+The ANOVA table above, with a p-value of 0.04, the null hypothesis is rejected at a 95% confidence level, meaning that there is a difference in the average systolic blood pressure with relationship type. Utilizing the Tukey's HSD test, this can be further broken down into the following at a 5% significance level:
+
+1.  With a p-value of 0.0386 and a 95% confidence interval of 0.07mmHg to 3.38mmHg, for those aged 20 to 55 years there is a difference in average systolic blood pressure between *Past* and *Never* in the Relationship variable. The null hypothesis is rejected for this family-wise pair. Those that belong to the *Past* category, on average, have an average systolic blood pressure that is 1.72mmHg higher than those belonging to the *Current* category.
+2.  With a p-value of 0.2088, there is no difference in average systolic blood pressure between *Never* and *Current* in the Relationship variable for individuals aged 20 to 55 years, meaning the null hypothesis has failed to be rejected for this family-wise pair.
+3.  With a p-value of 0.3191, there is no difference in average systolic blood pressure between *Past* and *Current* in the Relationship variable for those aged 20 to 55 years, meaning the null hypothesis has failed to be rejected for this family-wise pair.
+
+This can be further divided into Marital Statuses to see which specific pairs are contributing to this broad interpretation.
+
+```{r}
+
+sbp_ANOVA <- aov(BPSysAve ~ MaritalStatus, data = sbp)
+summary(sbp_ANOVA)
+TukeyHSD(sbp_ANOVA, conf.level=.95)
+
+```
+
+In the above 15 comparisons, only two pairs reject the null hypothesis at a 5% significance level in individuals aged between 20 and 55 years.
+
+1.  With a p-value of 0.0159 and a 95% confidence interval of 0.52mmHg to 8.41mmHg, there is a difference in average systolic blood pressure between *Separated* and *LivePartner* in the MaritalStatus variable. For those between 20 and 55 years old, if they are separated from their partner, on average they have an average systolic blood pressure that is 4.47mmHg higher than those that live with their partner.
+2.  In individuals between 20 and 55 years, with a p-value of 0.0123 and a 95% confidence interval of 0.58mmHg to 7.92mmHg, there is a difference in average systolic blood pressure between *Separated* and *NeverMarried* in the MaritalStatus variable. Those that are separated, on average, have an average systolic blood pressure that is 4.25mmHg higher than those that have never been married.
+
+All other comparisons fail to reject the null hypothesis at a 5% significance level, meaning we cannot conclude from this data that the average systolic blood pressure changes based on those pair comparisons for individuals aged 20 to 55 years.
+
+##### Diastolic Blood Pressure
+
+```{r}
+dbp <- NHANES_mod %>%
+  filter(BPDiaAve != 0) %>%
+  filter(!is.na(BPDiaAve)) 
+
+dbp_ANOVA2 <- aov(BPDiaAve ~ Relationship, data = dbp)
+summary(dbp_ANOVA2)
+TukeyHSD(dbp_ANOVA2, conf.level=.95)
+
+
+```
+
+The ANOVA table above provides a p-value of 1.26e-12, meaning the null hypothesis is rejected at most confidence levels. There is a difference in the average diastolic blood pressure with relationship type in those aged 20 to 55 years. Utilizing the Tukey's HSD test, this can be further broken down into the following at a 5% significance level:
+
+1.  With a p-value of 0.0000 and a 95% confidence interval of -3.25mmHg to -1.46mmHg, for those aged 20 to 55 years there is a difference in average diastolic blood pressure between *Never* and *Current* in the Relationship variable. The null hypothesis is rejected for this family-wise pair. Those having never been in a recordable relationship, on average, have an average diastolic blood pressure that is 2.35mmHg lower than those currently in a relationship.
+2.  With a p-value of 0.0198 and a 95% confidence interval of 0.17mmHg to 2.56mmHg, for those aged 20 to 55 years there is a difference in average diastolic blood pressure between *Past* and *Current* in the Relationship variable. The null hypothesis is rejected for this family-wise pair. Those having had a past relationship, on average, have an average diastolic blood pressure that is 1.37mmHg higher than those currently in a relationship.
+3.  With a p-value of 0.0000 and a 95% confidence interval of 2.40mmHg to 5.05mmHg, for those aged 20 to 55 years there is a difference in average diastolic blood pressure between *Past* and *Never* in the Relationship variable. The null hypothesis is rejected for this family-wise pair. Those having had a past relationship, on average, have an average diastolic blood pressure that is 3.72mmHg higher than those having never been in a recordable relationship.
+
+This can be further divided into Marital Statuses to see which specific pairs are contributing to this broad interpretation.
+
+```{r}
+
+dbp_ANOVA <- aov(BPDiaAve ~ MaritalStatus, data = dbp)
+summary(dbp_ANOVA)
+TukeyHSD(dbp_ANOVA, conf.level=.95)
+```
+
+An astounding seven out of the 15 comparisons above reject the null hypothesis at a 5% significance level in individuals aged between 20 and 55 years.
+
+1.  With a p-value of 0.0009 and a 95% confidence interval of -5.19mmHg to -0.88mmHg, there is a difference in average diastolic blood pressure between *LivePartner* and *Divorced* in the MaritalStatus variable. For those between 20 and 55 years old, if they live with their partner, on average they have an average diastolic blood pressure that is 3.04mmHg lower than those that are divorced.
+2.  In individuals between 20 and 55 years, with a p-value of 0.0000 and a 95% confidence interval of -5.53mmHg to -1.90mmHg, there is a difference in average diastolic blood pressure between *NeverMarried* and *Divorced* in the MaritalStatus variable. Those that have never been married, on average, have an average diastolic blood pressure that is 3.72mmHg lower than those that are divorced.
+3.  With a p-value of 0.0059 and a 95% confidence interval of 0.38mmHg to 3.61mmHg, there is a difference in average diastolic blood pressure between *Married* and *LivePartner* in the MaritalStatus variable. For those between 20 and 55 years old, if they are married, on average they have an average diastolic blood pressure that is 1.99mmHg higher than those that are living with their partner.
+4.  In individuals between 20 and 55 years, with a p-value of 0.0260 and a 95% confidence interval of 0.44mmHg to 11.83mmHg, there is a difference in average diastolic blood pressure between *Widowed* and *LivePartner* in the MaritalStatus variable. Individuals that are widowed, on average, have an average diastolic blood pressure that is 6.13mmHg higher than individuals living with their partner.
+5.  With a p-value of 0.0000 and a 95% confidence interval of -3.79mmHg to -1.55mmHg, there is a difference in average diastolic blood pressure between *NeverMarried* and *Married* in the MaritalStatus variable. For those between 20 and 55 years old, if they have never been married, on average they have an average diastolic blood pressure that is 2.67mmHg lower than those that are divorced.
+6.  In individuals between 20 and 55 years, with a p-value of 0.0478 and a 95% confidence interval of 0.02mmHg to 5.89mmHg, there is a difference in average diastolic blood pressure between *Separated* and *NeverMarried* in the MaritalStatus variable. Those that are separated from their partner, on average, have an average diastolic blood pressure that is 2.95mmHg higher than those that have never been married.
+7.  With a p-value of 0.0065 and a 95% confidence interval of 1.25mmHg to 12.39mmHg, there is a difference in average diastolic blood pressure between *Widowed* and *NeverMarried* in the MaritalStatus variable. For those between 20 and 55 years old, if they are a widow, on average they have an average diastolic blood pressure that is 6.82mmHg higher than those that have never been married.
+
+All other comparisons fail to reject the null hypothesis at a 5% significance level, meaning we cannot conclude from this data that the average diastolic blood pressure changes based on those pair comparisons for individuals aged 20 to 55 years.
+
+#### **Cholesterol**
+
+##### *Total Cholesterol*
+
+```{r}
+tc <- NHANES_mod %>%
+  filter(!is.na(TotChol))
+
+tc_ANOVA2 <- aov(TotChol ~ Relationship, data = tc)
+summary(tc_ANOVA2)
+TukeyHSD(tc_ANOVA2, conf.level=.95)
+
+
+```
+
+The ANOVA table above shows a p-value of 2.61e-14, meaning the null hypothesis is rejected at most confidence levels. There is a difference in the total cholesterol between relationship types in those aged 20 to 55 years. Utilizing the Tukey's HSD test, this can be further broken down into the following at a 5% significance level:
+
+1.  With a p-value of 0.0000 and a 95% confidence interval of -0.35mmol/L to -0.18mmol/L, for those aged 20 to 55 years there is a difference in the total cholesterol between *Never* and *Current* in the Relationship variable. The null hypothesis is rejected for this family-wise pair. Those having never been in a recordable relationship, on average, have an total cholesterol that is 0.26mmol/L lower than those currently in a relationship.
+2.  With a p-value of 0.2902, there is no difference in total cholesterol between *Past* and *Current* in the Relationship variable for those aged 20 to 55 years, meaning the null hypothesis has failed to be rejected for this family-wise pair.
+3.  With a p-value of 0.0000 and a 95% confidence interval of 0.21mmol/L to 0.46mmol/L, for those aged 20 to 55 years there is a difference in total cholesterol between *Past* and *Never* in the Relationship variable. The null hypothesis is rejected for this family-wise pair. Those having had a past relationship, on average, have an total cholesterol that is 0.33mmol/L higher than those having never been in a recordable relationship.
+
+This can be further divided into Marital Statuses to see which specific pairs are contributing to this broad interpretation.
+
+```{r}
+
+tc_ANOVA <- aov(TotChol ~ MaritalStatus, data = tc)
+summary(tc_ANOVA)
+TukeyHSD(tc_ANOVA, conf.level=.95)
+```
+
+Out of the 15 comparisons above, five reject the null hypothesis at a 5% significance level in individuals aged between 20 and 55 years.
+
+1.  With a p-value of 0.0130 and a 95% confidence interval of -0.43mmol/L to -0.03mmol/L, there is a difference in total cholesterol between *LivePartner* and *Divorced* in the MaritalStatus variable. For those between 20 and 55 years old, if they live with their partner, on average they have a total cholesterol that is 0.23mmol/L lower than those that are divorced.
+2.  In individuals between 20 and 55 years, with a p-value of 0.0000 and a 95% confidence interval of -0.51mmol/L to -0.17mmol/L, there is a difference in total cholesterol between *NeverMarried* and *Divorced* in the MaritalStatus variable. Those that have never been married, on average, have a total cholesterol that is 0.34mmol/L lower than those that are divorced.
+3.  With a p-value of 0.0061 and a 95% confidence interval of 0.03mmol/L to 0.33mmol/L, there is a difference in total cholesterol between *Married* and *LivePartner* in the MaritalStatus variable. For those between 20 and 55 years old, if they are married, on average they have a total cholesterol that is 0.18mmol/L higher than those that are living with their partner.
+4.  In individuals between 20 and 55 years, with a p-value of 0.0000 and a 95% confidence interval of -0.40mmol/L to -0.19mmol/L, there is a difference in total cholesterol between *NeverMarried* and *Married* in the MaritalStatus variable. Individuals that have never married, on average, have a total cholesterol that is 0.29mmol/L lower than individuals that are married.
+5.  With a p-value of 0.0479 and a 95% confidence interval of 0.001mmol/L to 0.55mmol/L, there is a difference in total cholesterol between *Separated* and *NeverMarried* in the MaritalStatus variable. For those between 20 and 55 years old, if they are separated, on average they have a total cholesterol that is 0.27mmol/L higher than those that have never been married.
+
+All other comparisons fail to reject the null hypothesis at a 5% significance level, meaning we cannot conclude from this data that total cholesterol changes based on those pair comparisons for individuals aged 20 to 55 years.
+
+##### Direct Cholesterol
+
+```{r}
+dc <- NHANES_mod %>%
+  filter(!is.na(DirectChol))
+
+dc_ANOVA2 <- aov(logDC ~ Relationship, data = dc)
+summary(dc_ANOVA2)
+TukeyHSD(dc_ANOVA2, conf.level=.95)
+
+
+```
+
+The ANOVA table above shows a p-value of 0.354, meaning the null hypothesis fails to be rejected at a 95% confidence level. There is no difference in the log-transformed direct cholesterol between relationship types in those aged 20 to 55 years. Further analysis shows using the Tukey's HSD test shows that all 3 pairs have a p-value greater than 0.05, also resulting in the rejection of the null hypothesis.
+
+To confirm this interpretation, the test can also be conducted on marital statuses to inspect each of the 15 pairs resulting.
+
+```{r}
+
+dc_ANOVA <- aov(logDC ~ MaritalStatus, data = dc)
+summary(dc_ANOVA)
+TukeyHSD(dc_ANOVA, conf.level=.95)
+```
+
+Although the ANOVA table suggests that the null hypothesis can be rejected at 95% confidence with a p-value of 0.0359, breaking this down with the Tukley's HSD test shows that none of the family-wise pairs reject the null hypothesis. Without the Tukley's HSD test, the interpretation of the ANOVA result would be an example of a type 1 error, where the correct null hypothesis is mistakenly rejected. However, given this further information, it can be said with 95% confidence that marital status does not influence the log-transformed direct cholesterol levels.
+
+## Discussion
+
+Several patterns arise from these findings. Reviewing the analyses closely, certain relationship types are always higher or lower than the other two being compared against, when significant. This also holds true when dissecting these categories back into their marital status variants, where some marital statuses are higher or lower than all those that are significantly different from it.
+
+### Pulse Rate
+
+Pulse showed only one significant relationship type comparison, where those currently in a relationship had a lower heart rate than those that have never been in a recordable relationship. Deep diving into these relationships with the fifteen individual comparisons, the two that showed a significant difference both contained the *Married* marital status, of which married individuals consistently had a pulse lower than both widows and those that have never married. This result is as was expected in the initial investigation for the study, since a symptom of heartbreak syndrome is tachycardia (Boyd and Solh 2020). A similar study by Akgümüş et al. 2023 found that between married and unmarried individuals, heart rate variability is significantly different, leading to an increased risk in the unmarried group and reduced risk in the married group for cardiovascular disease. This aligns well with the findings here, considering that the *Married* group have a lower pulse rate; an indicator of better heart health.
+
+### Blood Pressure
+
+For log-transformed pulse pressure, two out of three comparisons for relationship type were significantly different, both containing the *Never* category. Those that were never in a recordable relationship consistently have a higher pulse pressure than those currently in a relationship and those who have had a relationship in the past. When focusing on the individual marital statuses, three of the pairings have a significant difference between each other, with *NeverMarried* and *Divorced* each being compared to one another and to one other grouping. For the two comparisons containing individuals that have never married, those not married have a consistently higher pulse pressure than their counter parts who are either married or divorced. Conversely, the two comparisons against divorcees show that those who are divorces have a consistently lower pulse pressure than those separated or never married. Returning to the context of Takotsubo cardiomyopathy, this is unsurprising, since a symptom is a low or narrow pulse pressure for those that have experienced the stresses that the condition accompanies (Boyd and Solh 2020). The never married group is present in both the broader and narrowed findings of this analysis, and in both interpretations it appears that they always have a higher pulse pressure than their counterpart. Given the symptom of a narrowed pulse pressure, it was expected that divorcees would have a lower pulse pressure than those that have never married, though it was interesting that divorcees experience this drop more severely than those that are merely separated from their partner.
+
+Marital status and relationship type had differing impacts on the average systolic and diastolic blood pressure, which was an unanticipated outcome considering that it was presumed these variables would be dependent on each other. While there was two out of fifteen marital status pairs that displayed significant difference in average systolic blood pressure, seven of these fifteen showed a significant difference in average diastolic blood pressure. When looking more broadly, all three possible pairings have a significant difference in average diastolic blood pressure, with past relationships being consistently higher on average, no current or past relationships consistently having a lower value, and current relationships being inconsistent. This means the average diastolic blood pressure in the *Past* group is higher than the *Current* group, which is higher than the *Never* group. Analyzing this further offers more insights. Belonging to the *NeverMarried* category affects diastolic blood pressure the most often, with all comparisons except for against those that live with their partner being significant. However, widows have the highest average impact at 6.13mmHg and 6.81mmHg higher average diastolic blood pressure than those living with their partner and those never married, respectively. The other two marital statuses that are included in the past category alongside widows are also consistently higher than their counterparts in all comparisons that have a significant difference. A few other observations for the pairings that contain significant differences are the average systolic blood pressure of separated individuals is consistently higher, meanwhile living with a partner and having never been married both seem to have lower the average diastolic blood pressure. These findings are unexpected given the context of Takotsubo cardiomyopathy (Boyd and Solh 2020), since a symptom of the heart break condition is lower blood pressure, however it is expected given the well known effects of stress on raising blood pressure. The strangest finding of all in blood pressure is that married individuals consistently showed a higher average diastolic blood pressure when compared to those that are never married and those only living with their partner. Although there were no specific predictions considering the difference between these marital statuses, it is remarkable that married people tend to have a higher blood pressure, since it was previously mentioned that married people typically show better indicators of heart health.
+
+### Cholesterol
+
+The two measures of cholesterol were expected to be dependent on each other considering they likely influence one another in the body, however this was not the case upon conducting the analysis. While there is a significant difference in relationship type and marital statuses for total cholesterol levels, there was no significant difference found for either the broader relationship types or the narrower marital subcategories for the log-transformed direct cholesterol levels. Examining the total cholesterol data more closely, the *Never* relationship category is consistently lower than both *Past* and *Current* relationships. This unexpected result, given earlier predictions, means that those who have lost their relationship have more "good" cholesterol than those who have not had one at all. Breaking the relationships down into their subcategories, those that have never married both impacts the most outcomes to a significant level and has the top three values in terms of degree of effect. *NeverMarried* is consistently lower than its counterparts in the pairings with individuals that are married, divorced, and separated, aligning well with the previous observation for the broader relationship variable pairings. Those that are not married but live with their partner is also consistently lower than divorcees and married individuals, which is another interesting finding considering the implications that this suggests not that being in a relationship is better, but having been married, either in the present or in the past has a better outcome on total cholesterol levels. This inference remains valid for others that have been married and either currently are or have been in the past, as the categories *Married, Separated,* and *Divorced* all are higher than their counterparts that have a significant difference. However, this falls apart for widows, since there was no found significant difference between the total cholesterol levels in widows and any of the other marital statuses.
+
+## Conclusions
+
+With the widely known idea of death by broken heart, and the lesser known real condition known as Takotsubo cardiomyopathy, the question of whether or not relationship or marital status seems to make a difference in one's heart health comes to the forefront. According to the above data, it appears that this may hold true for some heart health indicators, while not for others. Namely, it held true that relationship and marital status can influence pulse, pulse pressure, average systolic blood pressure, average diastolic blood pressure, and total cholesterol. Most of the impact manifested in the average diastolic blood pressure and total cholesterol in terms of how many pairings show a significant difference between the matchups. However, it cannot be concluded that relationship or marital status influences direct cholesterol levels.
+
+Alfred Lord Tennyson presented in his poem *In Memoriam A.H.H.* that "'tis better to have loved and lost than never to have loved at all" after the death of a close friend (Tennyson 1906, Roden 2023). According to the analysis of the observations in the NHANES data set, this may be the case for some indicators of heart health in terms of romantic relationships, but not all. Analyzed here, the only indicator this seems to hold true for consistently is total cholesterol levels, where the good cholesterol is typically higher in those that are married, divorced, and separated, though this is not true in the case of widows, which more comparable to Tennyson's situation. The opposite is in fact true when discussing diastolic blood pressure, where those who have been married at some point in their lives are always higher than those who have not or simply live with their partner, in the pairings that show a significant difference.
+
+Future investigations may want to look into this concept presented by Tennyson by creating a variable investigating those who have been married and those who have not to compare against similar variables. Another interesting study could be to repeat these tests, but for individuals over 55 years; perhaps there are more significant effects on heart health when the confounding factor of old age is included in the investigations. These could all be expanded by looking at if there is a difference in the effects of these between the sexes; considering a recent study made the claim that men live longer when married than when not, but this isn't the case for women (Wilford 2022), it could be that the effects on the heart vary by the sexes and contributes to this discrepancy. Nonetheless, it appears that within the confines of this study, in individuals between 20 and 55 years, marital status and relationship type can effect indicators of heart health, though not in a way where a person's love life is more or less likely to have worse heart health consistently across all variables.
+
+## References:
+
+Boyd, Brenton MMSc, PA-C; Solh, Tia MSPAS, PA-C. Takotsubo cardiomyopathy: Review of broken heart syndrome. Journal of the American Academy of Physician Assistants 33(3):p 24-29, March 2020. \| DOI: 10.1097/01.JAA.0000654368.35241.fc
+
+Mhemani. “7 Signs of a Healthy Heart” *Integra Urgent Care - Dallas / Fort Worth*, 20 Feb. 2018, integrauc.com/blog/7-signs-healthy-heart/. Accessed September 11, 2024.
+
+“Is Your Heart Healthy? How to Improve Heart Health.” Edited by Sabeen Chaudry, *Baystate Health*, 17 Feb. 2023, www.baystatehealth.org/articles/how-to-check-heart-health. Accessed September 11, 2024.
+
+“Nhanes - about the National Health and Nutrition Examination Survey.” *Centers for Disease Control and Prevention*, Centers for Disease Control and Prevention, 31 May 2023, www.cdc.gov/nchs/nhanes/about_nhanes.htm.
+
+Dalrymple, Michelle, and Chris Wild. “NHANES: Data from the US National Health and Nutrition ...” *Cran.r-Project.Org*, 12 Oct. 2022, cran.r-project.org/web/packages/NHANES/NHANES.pdf. Accessed September 11, 2024.
+
+Cleveland Clinic. “What Is Pulse Pressure?” *Cleveland Clinic*, 31 July 2024, my.clevelandclinic.org/health/body/21629-pulse-pressure. Accessed September 11, 2024.
+
+Assadi SN. What are the effects of psychological stress and physical work on blood lipid profiles? Medicine (Baltimore). 2017 May;96(18):e6816. doi: 10.1097/MD.0000000000006816. PMID: 28471984; PMCID: PMC5419930.
+
+Heart.org. “HDL (Good), LDL (Bad) Cholesterol and Triglycerides.” *Www.Heart.Org*, 19 Feb. 2024, www.heart.org/en/health-topics/cholesterol/hdl-good-ldl-bad-cholesterol-and-triglycerides. Accessed on September 12, 2024.
+
+National Institute of Aging. “Heart Health and Aging \| National Institute on Aging.” *National Institute of Health*, www.nia.nih.gov/health/heart-health/heart-health-and-aging. Accessed 27 Sept. 2024.
+
+Akgümüş A, Balun A, Peker T, Boyraz B. The effect of being married on heart rate variability, an indicator of autonomic dysfunction: A retrospective study. Medicine (Baltimore). 2023 Jul 7;102(27):e34282. doi: 10.1097/MD.0000000000034282. PMID: 37417638; PMCID: PMC10328619.
+
+Tennyson, Alfred Tennyson, Baron. In Memoriam . ed by Tennyson, Hallam Tennyson, Baron New York, The Macmillan company; London, Macmillan & co., ltd, 1906.
+
+Roden, Bex. “5 Famous Literary Quotes Explained: ‘'tis Better to Have Loved and Lost than Never to Have Loved at All.’” *History Through Fiction*, History Through Fiction, 18 Jan. 2023, www.historythroughfiction.com/blog/famous-literary-quotes-four.
+
+Wilford, Denette. “Married Men Live Longer; Married Women, Not so Much: Study.” *Toronto Sun*, 2022, torontosun.com/health/married-men-live-longer-married-women-not-so-much-study.
