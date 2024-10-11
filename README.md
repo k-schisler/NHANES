@@ -23,6 +23,8 @@ I've used this dataset to explore the following concepts, R codes, etc:
       - Checked for relationship with gender - is it different between them?  
 
 ### _Possible Future Research Questions:_
+- Heart Health and relationship for those 55+ years
+- Heart Health and relationship - flesh out gender study
 - Pregnancy loss and perceived physical health
 - Pregnancy loss and perceived mental health
 - BMI vs Blood pressure
